@@ -193,7 +193,7 @@ Follow our [installation guide](#️-installation) to start building your own AI
   </p>
 </div>
 
-<div style="background-color: #e3f2fd; padding: 12px; border-radius: 8px; border-left: 4px solid #1e88e5; margin: 10px 0;">
+<!-- <div style="background-color: #e3f2fd; padding: 12px; border-radius: 8px; border-left: 4px solid #1e88e5; margin: 10px 0;">
   <h4 style="color: #1e88e5; margin: 0 0 8px 0;">
     🎉 Latest Major Update - March 15, 2025
   </h4>
@@ -205,8 +205,9 @@ Follow our [installation guide](#️-installation) to start building your own AI
     </ul>
     <i>Try it now and experience the improved performance in your automation tasks!</i>
   </p>
-</div>
+</div> -->
 
+- **[2025.09.22]**: Exicited to announce that OWL has been accepted by NeurIPS 2025!🚀 Check the latest paper [here](https://arxiv.org/abs/2505.23885).
 - **[2025.07.21]**: We open-sourced the training dataset and model checkpoints of OWL project. Training code coming soon.  [huggingface link](https://huggingface.co/collections/camel-ai/optimized-workforce-learning-682ef4ab498befb9426e6e27).
 - **[2025.05.27]**: We released the technical report of OWL, including more details on the workforce (framework) and optimized workforce learning (training methodology).  [paper](https://arxiv.org/abs/2505.23885).
 - **[2025.05.18]**: We open-sourced an initial version for replicating workforce experiment on GAIA [here](https://github.com/camel-ai/owl/tree/gaia69).
