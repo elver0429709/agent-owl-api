@@ -35,10 +35,11 @@ RUN uv venv .venv --python=3.10 && \
     uv pip install -e .
 
 # Copy project runtime files
-COPY ../owl/ ./owl/
-COPY ../licenses/ ./licenses/
-COPY ../assets/ ./assets/
-COPY README_zh.md .
+COPY licenses/ ./licenses/
+COPY .container/assets/ ./assets/
+COPY .container/assets/README_ja.md ./README_ja.md
+COPY .container/assets/README_zh.md ./README_zh.md
+
 
 # Create startup script
 RUN printf '#!/bin/bash\nxvfb-run --auto-servernum --server-args="-screen 0 1280x960x24" python "$@"' > /usr/local/bin/xvfb-python && \
