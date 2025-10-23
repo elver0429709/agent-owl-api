@@ -52,8 +52,8 @@ RUN printf '#!/bin/bash\necho "Welcome to the OWL Project Docker environment!"\n
 WORKDIR /app/owl
 
 # Add health check
-HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-    CMD python -c "import sys; sys.exit(0 if __import__('os').path.exists('/app/owl') else 1)"
+# HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
+# CMD python -c 'import sys;exit(0 if (import_("owl").path.exists(/app/owl) else 1))'
 
 # Container startup command
 CMD ["/bin/bash", "./run_in_docker.sh"]
