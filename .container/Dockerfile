@@ -35,9 +35,9 @@ RUN uv venv .venv --python=3.10 && \
     uv pip install -e .
 
 # Copy project runtime files
-COPY owl/ ./owl/
-COPY licenses/ ./licenses/
-COPY assets/ ./assets/
+COPY ../owl/ ./owl/
+COPY ../licenses/ ./licenses/
+COPY ../assets/ ./assets/
 COPY README_zh.md .
 
 # Create startup script
