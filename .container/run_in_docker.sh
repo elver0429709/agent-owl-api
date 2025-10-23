@@ -117,14 +117,17 @@ fi
 echo "在Docker容器中使用 $PYTHON_CMD 运行脚本... | Running script in Docker container using $PYTHON_CMD..."
 
 # 根据操作系统类型执行不同的命令 | Execute different commands based on operating system type
-if [[ "$OS_TYPE" == MINGW* ]] || [[ "$OS_TYPE" == CYGWIN* ]] || [[ "$OS_TYPE" == MSYS* ]]; then
-    # Windows可能需要特殊处理引号 | Windows may need special handling for quotes
-    winpty $COMPOSE_CMD exec -T $SERVICE_NAME bash -c "cd .. && source .venv/bin/activate && cd owl && $PYTHON_CMD $SCRIPT_NAME \"$QUERY\""
+if [ "$OS_TYPE" = "Linux" ] || [ "$OS_TYPE" = "MacOS" ]; then
+    # Ejecución directa para Render/Docker sin Docker Compose
+    # Se asume que el directorio de trabajo es /app (del Dockerfile)
+    source .venv/bin/activate
+    cd owl
+    $PYTHON_CMD $SCRIPT_NAME "$QUERY"
     RESULT=$?
+    # Agregando un 'else' simple para mantener la estructura original del script
 else
-    # macOS 或 Linux | macOS or Linux
-    $COMPOSE_CMD exec -T $SERVICE_NAME bash -c "cd .. && source .venv/bin/activate && cd owl && $PYTHON_CMD $SCRIPT_NAME \"$QUERY\""
-    RESULT=$?
+    echo "Windows execution logic not supported directly on Render. Exiting."
+    exit 1
 fi
 
 # 检查命令执行结果 | Check command execution result
