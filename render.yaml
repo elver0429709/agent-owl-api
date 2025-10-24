@@ -2,9 +2,11 @@ services:
   - type: web
     name: agent-owl-api
     env: docker
-    dockerfilePath: .container/Dockerfile
     dockerContext: .
     buildCommand: |
-      cp -r .container container_temp
-      docker build -f container_temp/Dockerfile -t agent-owl .
+      echo "🔧 Copiando carpeta .container para el build..."
+      mkdir -p visible_container
+      cp -r .container/* visible_container/
+      echo "🚀 Construyendo imagen desde visible_container/Dockerfile..."
+      docker build -f visible_container/Dockerfile -t agent-owl .
     startCommand: npm start
