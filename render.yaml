@@ -3,10 +3,12 @@ services:
     name: agent-owl-api
     env: docker
     dockerfilePath: .container/Dockerfile
-    dockerContext: .container
+    dockerContext: .
     buildCommand: |
-      echo "📁 Archivos disponibles en el contexto:"
-      ls -R .container
-      echo "🚀 Iniciando construcción de la imagen Docker..."
+      echo "👉 Verificando archivos en raíz del proyecto:"
+      ls -la
+      echo "👉 Verificando archivos dentro de .container:"
+      ls -la .container || echo ".container no encontrada"
+      echo "🚀 Construyendo imagen Docker..."
       docker build -f .container/Dockerfile -t agent-owl .
     startCommand: npm start
