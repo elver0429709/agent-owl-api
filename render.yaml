@@ -4,5 +4,7 @@ services:
     env: docker
     dockerfilePath: .container/Dockerfile
     dockerContext: .
-    buildCommand: docker build -f .container/Dockerfile -t agent-owl .
+    buildCommand: |
+      cp -r .container container_temp
+      docker build -f container_temp/Dockerfile -t agent-owl .
     startCommand: npm start
