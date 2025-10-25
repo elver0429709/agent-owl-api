@@ -1,27 +1,30 @@
-# Imagen base oficial de Python
+# Imagen base estable
 FROM python:3.10-slim
 
-# Evita que Python guarde archivos .pyc (optimiza el contenedor)
+# Variables de entorno para mejor desempeño
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
-# Establece el directorio de trabajo dentro del contenedor
+# Directorio de trabajo
 WORKDIR /app
 
-# Copia los archivos de dependencias primero (para aprovechar la caché de Docker)
+# Copiar archivo de dependencias
 COPY requirements.txt .
 
-# Instala las dependencias del proyecto
+# Actualizar pip y wheel antes de instalar
+RUN pip install --upgrade pip setuptools wheel
+
+# Instalar dependencias del proyecto
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Instala manualmente Camel desde GitHub (Render no soporta subdirectorios en pip)
+# Instalar manualmente el paquete Camel (Render no soporta subcarpetas en pip)
 RUN pip install "git+https://github.com/camel-ai/camel.git@main#egg=camel&subdirectory=camel"
 
-# Copia todo el código fuente del proyecto al contenedor
+# Copiar todo el código fuente
 COPY . .
 
-# Expone el puerto donde se ejecutará la app
+# Exponer el puerto (Render usa 10000 o 3000 según config)
 EXPOSE 3000
 
-# Comando por defecto al iniciar el contenedor
+# Comando de inicio
 CMD ["python", "owl/webapp.py"]
