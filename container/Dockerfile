@@ -36,9 +36,22 @@ RUN uv venv .venv --python=3.10 && \
 
 # Copy project runtime files
 COPY licenses/ ./licenses/
-COPY .container/assets/ ./assets/
-COPY .container/assets/README_ja.md ./README_ja.md
-COPY .container/assets/README_zh.md ./README_zh.md
+FROM node:20
+
+WORKDIR /app
+
+# Copia los assets directamente
+COPY assets/README_zh.md ./README_zh.md
+COPY assets/README_ja.md ./README_ja.md
+COPY assets/owl-favicon.ico ./owl-favicon.ico
+COPY assets/owl-architecture.png ./owl-architecture.png
+
+# Copia el resto del proyecto
+COPY . .
+
+RUN npm install
+CMD ["npm", "start"]
+
 
 
 # Create startup script
