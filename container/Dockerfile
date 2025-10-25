@@ -4,15 +4,17 @@ FROM python:3.10
 # Establecer directorio de trabajo
 WORKDIR /app
 
-# Copiar los archivos de requerimientos e instalarlos
-COPY requirements.txt .
+# Copiar archivos de requisitos (desde raíz del repo)
+COPY ./requirements.txt .
+
+# Instalar dependencias
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copiar el resto del proyecto
+# Copiar todo el proyecto (desde raíz, no solo /container)
 COPY . .
 
-# Exponer el puerto (ajusta si tu app usa otro)
+# Exponer puerto (ajústalo si tu app usa otro)
 EXPOSE 3000
 
-# Comando de ejecución (ajusta según tu punto de entrada)
-CMD ["python", "-m", "owl.main"]
+# Comando de ejecución (ajustado)
+CMD ["python", "owl/main.py"]
