@@ -1,29 +1,34 @@
-# Imagen base estable
+# Imagen base
 FROM python:3.10-slim
 
-# Variables de entorno para mejor desempeño
+# Variables de entorno
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
 # Directorio de trabajo
 WORKDIR /app
 
-# Copiar archivo de dependencias
+# Instalar dependencias del sistema (para compilar paquetes)
+RUN apt-get update && apt-get install -y git && rm -rf /var/lib/apt/lists/*
+
+# Copiar dependencias
 COPY requirements.txt .
 
-# Actualizar pip y wheel antes de instalar
+# Instalar pip actualizado
 RUN pip install --upgrade pip setuptools wheel
 
-# Instalar dependencias del proyecto
+# Instalar dependencias base
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Instalar manualmente el paquete Camel (Render no soporta subcarpetas en pip)
-RUN pip install "git+https://github.com/camel-ai/camel.git@main#egg=camel&subdirectory=camel"
+# Instalar CAMEL manualmente desde GitHub (sin usar subcarpeta)
+RUN git clone https://github.com/camel-ai/camel.git /tmp/camel \
+    && pip install /tmp/camel/camel \
+    && rm -rf /tmp/camel
 
-# Copiar todo el código fuente
+# Copiar el resto del código
 COPY . .
 
-# Exponer el puerto (Render usa 10000 o 3000 según config)
+# Exponer el puerto
 EXPOSE 3000
 
 # Comando de inicio
