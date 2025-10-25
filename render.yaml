@@ -4,5 +4,4 @@ services:
     env: docker
     dockerContext: .
     dockerFilePath: Dockerfile
-    buildCommand: ""
     startCommand: python owl/webapp.py
