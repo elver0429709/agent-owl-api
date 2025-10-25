@@ -3,9 +3,8 @@ services:
     name: owl-app
     env: python
     plan: free
-    buildCommand: "pip install -r ../requirements.txt"
-    startCommand: "python webapp.py"
+    buildCommand: "pip install --upgrade pip && pip install -r requirements.txt"
+    startCommand: "python owl/webapp.py"
     envVars:
       - key: PYTHON_VERSION
         value: 3.10.13
-    runtime: python
