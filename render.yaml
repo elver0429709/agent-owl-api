@@ -3,8 +3,7 @@ services:
     name: agent-owl-api
     env: docker
     dockerContext: .
-    dockerfilePath: .container/Dockerfile
+    dockerFilePath: container/Dockerfile
     buildCommand: |
-      echo "📦 Listando archivos dentro de .container:"
-      ls -R .container || echo "⚠️ No se encontró la carpeta .container"
-    startCommand: npm start
+      echo "🚀 Copiando desde la raíz del repositorio..."
+    startCommand: python owl/main.py
