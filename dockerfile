@@ -17,4 +17,4 @@ COPY . .
 EXPOSE 3000
 
 # Comando de inicio (ejecuta el main.py dentro de la carpeta owl)
-CMD ["python", "owl/main.py"]
+CMD ["python", "owl/webapp.py"]
