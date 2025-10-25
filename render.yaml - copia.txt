@@ -1,8 +1,0 @@
-services:
-  - type: web
-    name: agent-owl-api
-    env: docker
-    dockerfilePath: .container/Dockerfile
-    dockerContext: .
-    buildCommand: docker build -f .container/Dockerfile -t agent-owl .
-    startCommand: npm start
