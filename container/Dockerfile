@@ -46,8 +46,8 @@ FROM node:20
 WORKDIR /app
 
 # Copia los assets directamente desde container/assets
-COPY container/assets/README_zh.md ./README_zh.md
-COPY container/assets/README_ja.md ./README_ja.md
+COPY container/README_zh.md ./README_zh.md
+COPY container/README_ja.md ./README_ja.md
 COPY container/assets/owl-favicon.ico ./owl-favicon.ico
 COPY container/assets/owl-architecture.png ./owl-architecture.png
 
