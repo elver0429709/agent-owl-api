@@ -3,5 +3,5 @@ services:
     name: agent-owl-api
     env: docker
     dockerContext: .
-    dockerFilePath: Dockerfile
+    dockerfilePath: ./Dockerfile
     startCommand: python owl/webapp.py
