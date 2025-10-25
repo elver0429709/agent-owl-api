@@ -1,7 +1,10 @@
 services:
   - type: web
-    name: agent-owl-api
-    env: docker
-    dockerContext: .
-    dockerfilePath: ./Dockerfile
-    startCommand: python owl/webapp.py
+    name: owl-app
+    env: python
+    plan: free
+    buildCommand: "pip install -r ../requirements.txt"
+    startCommand: "python webapp.py"
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.10.13
