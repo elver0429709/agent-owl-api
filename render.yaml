@@ -5,8 +5,6 @@ services:
     dockerContext: .
     dockerfilePath: .container/Dockerfile
     buildCommand: |
-      echo "📦 Listando archivos disponibles:"
-      ls -R .container
-      echo "🚀 Construyendo imagen Docker..."
-      docker build -f .container/Dockerfile -t agent-owl .
+      echo "📦 Listando archivos dentro de .container:"
+      ls -R .container || echo "⚠️ No se encontró la carpeta .container"
     startCommand: npm start
