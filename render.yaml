@@ -3,7 +3,6 @@ services:
     name: agent-owl-api
     env: docker
     dockerContext: .
-    dockerFilePath: container/Dockerfile
-    buildCommand: |
-      echo "🚀 Copiando desde la raíz del repositorio..."
+    dockerFilePath: Dockerfile
+    buildCommand: ""
     startCommand: python owl/main.py
