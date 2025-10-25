@@ -4,4 +4,4 @@ services:
     env: python
     plan: free
     buildCommand: "pip install --upgrade pip && pip install -r requirements.txt"
-    startCommand: "python owl/webapp.py"
+    startCommand: "cd owl && python webapp.py"
