@@ -41,10 +41,20 @@ FROM node:20
 WORKDIR /app
 
 # Copia los assets directamente
-COPY assets/README_zh.md ./README_zh.md
-COPY assets/README_ja.md ./README_ja.md
-COPY assets/owl-favicon.ico ./owl-favicon.ico
-COPY assets/owl-architecture.png ./owl-architecture.png
+FROM node:20
+
+WORKDIR /app
+
+# Copia los assets directamente desde container/assets
+COPY container/assets/README_zh.md ./README_zh.md
+COPY container/assets/README_ja.md ./README_ja.md
+COPY container/assets/owl-favicon.ico ./owl-favicon.ico
+COPY container/assets/owl-architecture.png ./owl-architecture.png
+
+COPY . .
+
+RUN npm install
+CMD ["npm", "start"]
 
 # Copia el resto del proyecto
 COPY . .
