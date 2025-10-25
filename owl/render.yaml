@@ -3,4 +3,4 @@ services:
     name: agent-owl-api
     env: python
     buildCommand: "pip install -r requirements.txt"
-    startCommand: "cd owl && python webapp.py"
+    startCommand: "cd owl && python3 webapp.py"
