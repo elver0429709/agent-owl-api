@@ -4,5 +4,6 @@ services:
     env: python
     plan: free
     buildCommand: "pip install --upgrade pip && pip install -r requirements.txt"
-   startCommand: "python3 --version"
-
+   python onl_whispe.py
+# o
+python online_whisper.py
