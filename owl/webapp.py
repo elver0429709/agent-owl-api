@@ -40,19 +40,20 @@ def zapier_entrypoint():
 def send_to_n8n():
     """Envía los resultados del agente OWL hacia n8n"""
     data = request.get_json()
-    print("📡 Enviando datos a n8n:", data)
+    print("📤 Enviando datos a n8n:", data)
 
-   n8n_url = os.getenv("N8N_WEBHOOK_URL")
+    n8n_url = os.getenv("N8N_WEBHOOK_URL")
     if n8n_url:
         try:
             response = requests.post(n8n_url, json=data)
-            print("✅ OWL → n8n OK:", response.status_code)
+            print(f"✅ OWL → n8n OK:", response.status_code)
             return jsonify({"status": "sent", "n8n_response": response.json()})
         except Exception as e:
             print("⚠️ Error enviando a n8n:", str(e))
             return jsonify({"status": "error", "message": str(e)}), 500
-
-return jsonify({"status": "error", "message": "N8N_WEBHOOK_URL not set"}), 500
+    else:
+        print("⚠️ No se encontró N8N_WEBHOOK_URL en las variables de entorno")
+        return jsonify({"status": "error", "message": "N8N_WEBHOOK_URL not set"}), 500
 
 # Configure logging system
 def setup_logging():
