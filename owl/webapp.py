@@ -13,8 +13,8 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 # See the License for the specific language governing permissions and
 # limitations under the License.
 # ========= Copyright 2023-2024 @ CAMEL-AI.org. All Rights Reserved. =========
-# Import from the correct module path
-from utils import run_society
+#Import from the correct module path
+#from utils import run_society
 import os
 from flask import Flask, request, jsonify
 from typing import Tuple
