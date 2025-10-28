@@ -35,25 +35,6 @@ def zapier_entrypoint():
     final_result = run_society(task)
     return jsonify({"status": "completed", "result": final_result})
     
-# Nueva ruta: OWL se conecta con n8n y recibe respuesta
-@flask_app.route('/callback', methods=['POST'])
-def callback_from_n8n():
-    """Recibe la respuesta final desde n8n y la reenvía a Zapier/OpenAI"""
-    data = request.get_json()
-    print("📨 Callback recibido desde n8n:", data)
-
-    zapier_url = os.getenv("ZAPIER_RETURN_URL")
-    if zapier_url:
-        try:
-            requests.post(zapier_url, json=data)
-            print("✅ Respuesta reenviada a Zapier/OpenAI")
-        except Exception as e:
-            print("⚠️ Error reenviando a Zapier:", str(e))
-    else:
-        print("⚠️ No se encontró ZAPIER_RETURN_URL en las variables de entorno")
-
-    return jsonify({"status": "received"})
-
 # Ruta adicional: OWL envía los resultados a n8n
 @flask_app.route('/send-to-n8n', methods=['POST'])
 def send_to_n8n():
