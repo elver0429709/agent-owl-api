@@ -14,20 +14,30 @@
 # Import from the correct module path
 from owl.utils import run_society
 import os
-import gradio as gr
+from flask import Flask, request, jsonify
+from typing import Tuple
+import importlib
+import threading
+import queue
+import re
 import time
 import json
 import logging
 import datetime
-from typing import Tuple
-import importlib
 from dotenv import load_dotenv, set_key, find_dotenv, unset_key
-import threading
-import queue
-import re
 
 os.environ["PYTHONIOENCODING"] = "utf-8"
 
+flask_app = Flask(__name__)
+@flask_app.route('/', methods=['GET'])
+def root_message():
+return jsonify({"message": "Agent Owl API is ready for Zapier!"})
+@flask_app.route('/zapier-webhook', methods=['POST'])
+def zapier_entrypoint():
+data = request.get_json()
+task = data.get('task')
+final_result = run_society(task)
+return jsonify({"status": "completed", "result": final_result})
 
 # Configure logging system
 def setup_logging():
@@ -1301,15 +1311,14 @@ def main():
 
         # Initialize .env file (if it doesn't exist)
         init_env_file()
-        app = create_ui()
+       # ... (código de logging y init_env_file)
+    init_env_file() # Línea 1313
 
-        app.queue()
-        app.launch(
-            share=False,
-            favicon_path=os.path.join(
-                os.path.dirname(__file__), "assets", "owl-favicon.ico"
-            ),
-        )
+    pass # Sustituye a app = create_ui() y app.launch()
+
+except Exception as e:
+# ... (el resto del código sigue igual)
+
     except Exception as e:
         logging.error(f"Error occurred while starting the application: {str(e)}")
         print(f"Error occurred while starting the application: {str(e)}")
