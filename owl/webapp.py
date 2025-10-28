@@ -28,16 +28,50 @@ from dotenv import load_dotenv, set_key, find_dotenv, unset_key
 
 os.environ["PYTHONIOENCODING"] = "utf-8"
 
-flask_app = Flask(__name__)
-@flask_app.route('/', methods=['GET'])
-def root_message():
-return jsonify({"message": "Agent Owl API is ready for Zapier!"})
-@flask_app.route('/zapier-webhook', methods=['POST'])
+@flask_app.route('/webhook', methods=['POST'])
 def zapier_entrypoint():
-data = request.get_json()
-task = data.get('task')
-final_result = run_society(task)
-return jsonify({"status": "completed", "result": final_result})
+    data = request.get_json()
+    task = data.get('task')
+    final_result = run_society(task)
+    return jsonify({"status": "completed", "result": final_result})
+    
+# Nueva ruta: OWL se conecta con n8n y recibe respuesta
+@flask_app.route('/callback', methods=['POST'])
+def callback_from_n8n():
+    """Recibe la respuesta final desde n8n y la reenvía a Zapier/OpenAI"""
+    data = request.get_json()
+    print("📨 Callback recibido desde n8n:", data)
+
+    zapier_url = os.getenv("ZAPIER_RETURN_URL")
+    if zapier_url:
+        try:
+            requests.post(zapier_url, json=data)
+            print("✅ Respuesta reenviada a Zapier/OpenAI")
+        except Exception as e:
+            print("⚠️ Error reenviando a Zapier:", str(e))
+    else:
+        print("⚠️ No se encontró ZAPIER_RETURN_URL en las variables de entorno")
+
+    return jsonify({"status": "received"})
+
+# Ruta adicional: OWL envía los resultados a n8n
+@flask_app.route('/send-to-n8n', methods=['POST'])
+def send_to_n8n():
+    """Envía los resultados del agente OWL hacia n8n"""
+    data = request.get_json()
+    print("📡 Enviando datos a n8n:", data)
+
+   n8n_url = os.getenv("N8N_WEBHOOK_URL")
+    if n8n_url:
+        try:
+            response = requests.post(n8n_url, json=data)
+            print("✅ OWL → n8n OK:", response.status_code)
+            return jsonify({"status": "sent", "n8n_response": response.json()})
+        except Exception as e:
+            print("⚠️ Error enviando a n8n:", str(e))
+            return jsonify({"status": "error", "message": str(e)}), 500
+
+return jsonify({"status": "error", "message": "N8N_WEBHOOK_URL not set"}), 500
 
 # Configure logging system
 def setup_logging():
