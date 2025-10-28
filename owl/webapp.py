@@ -1312,34 +1312,18 @@ def create_ui():
 
 # Main function
 def main():
+   
     try:
-        # Initialize logging system
-        global LOG_FILE
-        LOG_FILE = setup_logging()
-        logging.info("OWL Web application started")
-
-        # Start log reading thread
-        log_thread = threading.Thread(
-            target=log_reader_thread, args=(LOG_FILE,), daemon=True
-        )
-        log_thread.start()
-        logging.info("Log reading thread started")
-
         # Initialize .env file (if it doesn't exist)
-        init_env_file()
-       # ... (código de logging y init_env_file)
-    init_env_file() # Línea 1313
+        init_env_file()  # Línea 1313
 
-    pass # Sustituye a app = create_ui() y app.launch()
-
-except Exception as e:
-# ... (el resto del código sigue igual)
+        # Sustituye a app = create_ui() y app.launch()
+        pass
 
     except Exception as e:
         logging.error(f"Error occurred while starting the application: {str(e)}")
         print(f"Error occurred while starting the application: {str(e)}")
         import traceback
-
         traceback.print_exc()
 
     finally:
@@ -1350,4 +1334,5 @@ except Exception as e:
 
 
 if __name__ == "__main__":
+    
     main()
