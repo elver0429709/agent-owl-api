@@ -1351,7 +1351,7 @@ from datetime import datetime
 
 N8N_WEBHOOK_URL = "https://elverjm.app.n8n.cloud/webhook/JezDJ35T0xpIcpq"
 
-@app.route("/relay_to_n8n", methods=["POST"])
+@flask_app.route("/relay_to_n8n", methods=["POST"])
 def relay_to_n8n():
     """
     Endpoint auxiliar para reenviar datos a n8n.
