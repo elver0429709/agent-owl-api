@@ -1337,13 +1337,8 @@ def main():
         import traceback
         traceback.print_exc()
 
-    finally:
-        # Ensure log thread stops
-        STOP_LOG_THREAD.set()
-        STOP_REQUESTED.set()
-        logging.info("Application closed")
+    if __name__ == "__main__":
+    import os
+    port = int(os.environ.get("PORT", 10000))  # Render asigna el puerto dinámicamente
+    flask_app.run(host="0.0.0.0", port=port, debug=False)
 
-
-if __name__ == "__main__":
-    
-    main()
