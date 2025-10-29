@@ -1349,7 +1349,7 @@ import requests
 import json
 from datetime import datetime
 
-N8N_WEBHOOK_URL = "https://elverjm.app.n8n.cloud/webhook/owl-test"
+N8N_WEBHOOK_URL = "https://elverjm.app.n8n.cloud/webhook-test/owl-test"
 
 @flask_app.route("/relay_to_n8n", methods=["POST"])
 def relay_to_n8n():
