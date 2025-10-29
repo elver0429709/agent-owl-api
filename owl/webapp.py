@@ -1323,7 +1323,6 @@ def create_ui():
 
 # Main function
 def main():
-   
     try:
         # Initialize .env file (if it doesn't exist)
         init_env_file()  # Línea 1313
@@ -1332,10 +1331,10 @@ def main():
         pass
 
     except Exception as e:
-    logging.error(f"Error occurred while starting the application: {str(e)}")
-    print(f"Error occurred while starting the application: {str(e)}")
-    import traceback
-    traceback.print_exc()
+        logging.error(f"Error occurred while starting the application: {str(e)}")
+        print(f"Error occurred while starting the application: {str(e)}")
+        import traceback
+        traceback.print_exc()
 
 
 @flask_app.route("/health", methods=["GET"])
