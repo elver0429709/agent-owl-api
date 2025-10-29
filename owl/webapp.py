@@ -1341,6 +1341,52 @@ def main():
 def health_check():
     return "OK", 200
 
+# ============================================================
+# 🧩 Bloque agregado por Elver — Conexión OWL → n8n
+# ============================================================
+
+import requests
+import json
+from datetime import datetime
+
+N8N_WEBHOOK_URL = "https://elverjm.app.n8n.cloud/webhook/JezDJ35T0xpIcpq"
+
+@app.route("/relay_to_n8n", methods=["POST"])
+def relay_to_n8n():
+    """
+    Endpoint auxiliar para reenviar datos a n8n.
+    No interfiere con el flujo interno de OWL.
+    """
+    try:
+        data = request.get_json(force=True)
+
+        # Log básico en archivo local
+        with open("owl_log.txt", "a", encoding="utf-8") as f:
+            f.write(f"\n[{datetime.now()}] Relay to n8n: {json.dumps(data, ensure_ascii=False)}\n")
+
+        # Reenvío directo al webhook de n8n
+        response = requests.post(
+            N8N_WEBHOOK_URL,
+            json=data,
+            headers={"Content-Type": "application/json"}
+        )
+
+        # Validación de respuesta
+        if response.status_code == 200:
+            result = response.json()
+        else:
+            result = {"error": f"n8n devolvió {response.status_code}"}
+
+        # Log de respuesta
+        with open("owl_log.txt", "a", encoding="utf-8") as f:
+            f.write(f"[{datetime.now()}] n8n response: {json.dumps(result, ensure_ascii=False)}\n")
+
+        return jsonify(result), 200
+
+    except Exception as e:
+        with open("owl_log.txt", "a", encoding="utf-8") as f:
+            f.write(f"[{datetime.now()}] ERROR relay_to_n8n: {str(e)}\n")
+        return jsonify({"error": str(e)}), 500
 
 if __name__ == "__main__":
     import os
