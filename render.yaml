@@ -4,4 +4,4 @@ services:
     env: python
     plan: free
     buildCommand: "pip install --upgrade pip && pip install -r requirements.txt"
-   startCommand: gunicorn -w 1 -b 0.0.0.0:$PORT owl.webapp:flask_app
+  start: python owl/webapp.py
