@@ -1332,17 +1332,19 @@ def main():
         pass
 
     except Exception as e:
-        logging.error(f"Error occurred while starting the application: {str(e)}")
-        print(f"Error occurred while starting the application: {str(e)}")
-        import traceback
-        traceback.print_exc()
+    logging.error(f"Error occurred while starting the application: {str(e)}")
+    print(f"Error occurred while starting the application: {str(e)}")
+    import traceback
+    traceback.print_exc()
+
 
 @flask_app.route("/health", methods=["GET"])
 def health_check():
     return "OK", 200
-    
+
+
 if __name__ == "__main__":
     import os
-    port = int(os.environ.get("PORT", 10000))  # Render asigna el puerto dinámicamente
+    port = int(os.environ.get("PORT", 10000))
     flask_app.run(host="0.0.0.0", port=port, debug=False)
 
