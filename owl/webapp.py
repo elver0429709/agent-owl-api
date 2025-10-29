@@ -5,6 +5,15 @@
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
+from flask import Flask, request, jsonify
+
+flask_app = Flask(__name__)  # ← ESTA LÍNEA ES CLAVE
+
+@flask_app.route('/webhook', methods=['POST'])
+def webhook():
+    data = request.get_json()
+    return jsonify({'received': data}), 200
+
 import sys, os
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 # Unless required by applicable law or agreed to in writing, software
