@@ -66,54 +66,71 @@ def send_to_n8n():
         print("⚠️ No se encontró N8N_WEBHOOK_URL en las variables de entorno")
         return jsonify({"status": "error", "message": "N8N_WEBHOOK_URL not set"}), 500
 
-# Endpoint para exponer el manifiesto MCP (para OpenAI Agent Builder)
-@flask_app.route('/manifest.json', methods=['GET'])
-def manifest():
-    """Provee un manifiesto MCP completamente compatible con OpenAI Agent Builder."""
-    manifest_data = {
-        "schema_version": "v1",
-        "version": "1.0.0",
-        "name": "OWL MCP Server",
-        "description": "Servidor OWL conectado a n8n y Render, capaz de enviar y recibir datos.",
-        "tools_schema": "https://schema.openai.com/tools/v1",
-        "capabilities": ["tools"],
-        "tools": [
-            {
-                "name": "send_to_n8n",
-                "description": "Envía datos del agente OWL hacia el flujo principal de n8n.",
-                "input_type": "application/json",
-                "output_type": "application/json",
-                "parameters": {
-                    "type": "object",
-                    "properties": {
-                        "message": {"type": "string"},
-                        "recipient": {"type": "string"},
-                        "timestamp": {"type": "string"}
+# ============================================================
+# ✅ NUEVO ENDPOINT PARA OPENAPI 3.0.0
+# ============================================================
+#@flask_app.route('/openapi.json', methods=['GET'])
+def openapi_spec():
+    """Provee un esquema OpenAPI 3.0.0 compatible con OpenAI Agent Builder."""
+    host = request.host_url.rstrip('/')  # Obtiene la URL base (Render)
+    
+    openapi_data = {
+        "openapi": "3.0.0",
+        "info": {
+            "title": "OWL Router",
+            "version": "1.0.0",
+            "description": "Servidor OWL que actúa como router de tareas a n8n para flujos de Marketing y Ventas."
+        },
+        "servers": [
+            {"url": host}
+        ],
+        "paths": {
+            "/relay_to_n8n": {
+                "post": {
+                    "operationId": "send_to_n8n",
+                    "summary": "Envía una solicitud de tarea de marketing/ventas a un flujo de automatización en n8n.",
+                    "requestBody": {
+                        "required": True,
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {"type": "string", "description": "Descripción detallada de la tarea que debe ejecutar n8n."},
+                                        "recipient": {"type": "string", "description": "El destinatario o plataforma clave de la tarea (ej: HubSpot, Brevo, Meta)."},
+                                        "timestamp": {"type": "string", "description": "Marca de tiempo de la solicitud."}
+                                    },
+                                    "required": ["message"]
+                                }
+                            }
+                        }
                     },
-                    "required": ["message"]
+                    "responses": {
+                        "200": {
+                            "description": "Tarea reenviada exitosamente a n8n."
+                        }
+                    }
                 }
             },
-            {
-                "name": "check_health",
-                "description": "Verifica si el servidor OWL está funcionando correctamente.",
-                "input_type": "application/json",
-                "output_type": "application/json",
-                "parameters": {
-                    "type": "object",
-                    "properties": {}
+            # Opcional: Agregar el health check si lo deseas
+            "/health": {
+                "get": {
+                    "operationId": "check_health",
+                    "summary": "Verifica si el servidor OWL está funcionando correctamente.",
+                    "responses": {"200": {"description": "Servidor OK."}}
                 }
             }
-        ]
+        },
+        "components": {}
     }
 
-    response = jsonify(manifest_data)
+    response = jsonify(openapi_data)
     response.headers['Content-Type'] = 'application/json; charset=utf-8'
     response.headers['Access-Control-Allow-Origin'] = '*'
     response.headers['Access-Control-Allow-Methods'] = 'GET, OPTIONS'
     response.headers['Access-Control-Allow-Headers'] = 'Content-Type, Authorization'
     return response
 
-    
 # Configure logging system
 def setup_logging():
     """Configure logging system to output logs to file, memory queue, and console"""
