@@ -77,7 +77,6 @@ def manifest():
         "description": "Servidor OWL conectado a n8n y Render, capaz de enviar y recibir datos.",
         "tools_schema": "https://schema.openai.com/tools/v1",
         "capabilities": ["tools"],
-
         "tools": [
             {
                 "name": "send_to_n8n",
@@ -108,10 +107,10 @@ def manifest():
     }
 
     response = jsonify(manifest_data)
-response.headers['Content-Type'] = 'application/json; charset=utf-8'
-response.headers['Access-Control-Allow-Origin'] = '*'
-return response
-
+    response.headers['Content-Type'] = 'application/json; charset=utf-8'
+    response.headers['Access-Control-Allow-Origin'] = '*'
+    return response
+    
 # Configure logging system
 def setup_logging():
     """Configure logging system to output logs to file, memory queue, and console"""
