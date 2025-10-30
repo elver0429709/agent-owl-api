@@ -49,6 +49,39 @@ def zapier_entrypoint():
 # Ruta adicional: OWL envía los resultados a n8n
 @flask_app.route('/send-to-n8n', methods=['POST'])
 def send_to_n8n():
+    # Endpoint para exponer el manifiesto MCP (para OpenAI Agent Builder)
+@flask_app.route('/manifest.json', methods=['GET'])
+def manifest():
+    """Provee un manifiesto MCP compatible con OpenAI Agent Builder."""
+    return jsonify({
+        "schema_version": "v1",
+        "name": "OWL MCP Server",
+        "description": "Servidor OWL conectado a n8n y Render, capaz de enviar y recibir datos.",
+        "tools": [
+            {
+                "name": "send_to_n8n",
+                "description": "Envía datos del agente OWL hacia el flujo principal de n8n",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "message": {"type": "string"},
+                        "recipient": {"type": "string"},
+                        "timestamp": {"type": "string"}
+                    },
+                    "required": ["message"]
+                }
+            },
+            {
+                "name": "check_health",
+                "description": "Verifica si el servidor OWL está funcionando correctamente",
+                "parameters": {
+                    "type": "object",
+                    "properties": {}
+                }
+            }
+        ]
+    })
+
     """Envía los resultados del agente OWL hacia n8n"""
     data = request.get_json()
     print("📤 Enviando datos a n8n:", data)
