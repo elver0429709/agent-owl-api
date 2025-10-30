@@ -69,15 +69,21 @@ def send_to_n8n():
 # Endpoint para exponer el manifiesto MCP (para OpenAI Agent Builder)
 @flask_app.route('/manifest.json', methods=['GET'])
 def manifest():
-    """Provee un manifiesto MCP compatible con OpenAI Agent Builder."""
-    return jsonify({
+    """Provee un manifiesto MCP completamente compatible con OpenAI Agent Builder."""
+    manifest_data = {
         "schema_version": "v1",
+        "version": "1.0.0",
         "name": "OWL MCP Server",
         "description": "Servidor OWL conectado a n8n y Render, capaz de enviar y recibir datos.",
+        "tools_schema": "https://schema.openai.com/tools/v1",
+        "capabilities": ["tools"],
+
         "tools": [
             {
                 "name": "send_to_n8n",
-                "description": "Envía datos del agente OWL hacia el flujo principal de n8n",
+                "description": "Envía datos del agente OWL hacia el flujo principal de n8n.",
+                "input_type": "application/json",
+                "output_type": "application/json",
                 "parameters": {
                     "type": "object",
                     "properties": {
@@ -90,14 +96,21 @@ def manifest():
             },
             {
                 "name": "check_health",
-                "description": "Verifica si el servidor OWL está funcionando correctamente",
+                "description": "Verifica si el servidor OWL está funcionando correctamente.",
+                "input_type": "application/json",
+                "output_type": "application/json",
                 "parameters": {
                     "type": "object",
                     "properties": {}
                 }
             }
         ]
-    })
+    }
+
+    response = jsonify(manifest_data)
+response.headers['Content-Type'] = 'application/json; charset=utf-8'
+response.headers['Access-Control-Allow-Origin'] = '*'
+return response
 
 # Configure logging system
 def setup_logging():
