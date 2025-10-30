@@ -106,10 +106,12 @@ def manifest():
         ]
     }
 
-    response = jsonify(manifest_data)
-    response.headers['Content-Type'] = 'application/json; charset=utf-8'
-    response.headers['Access-Control-Allow-Origin'] = '*'
-    return response
+response = jsonify(manifest_data)
+response.headers['Content-Type'] = 'application/json; charset=utf-8'
+response.headers['Access-Control-Allow-Origin'] = '*'
+response.headers['Access-Control-Allow-Methods'] = 'GET, OPTIONS'
+response.headers['Access-Control-Allow-Headers'] = 'Content-Type, Authorization'
+return response
     
 # Configure logging system
 def setup_logging():
