@@ -52,6 +52,27 @@ def send_to_n8n():
     # Endpoint para exponer el manifiesto MCP (para OpenAI Agent Builder)
 @flask_app.route('/manifest.json', methods=['GET'])
 def manifest():
+
+    """Envía los resultados del agente OWL hacia n8n"""
+    data = request.get_json()
+    print("📤 Enviando datos a n8n:", data)
+
+    n8n_url = os.getenv("N8N_WEBHOOK_URL")
+    if n8n_url:
+        try:
+            response = requests.post(n8n_url, json=data)
+            print(f"✅ OWL → n8n OK:", response.status_code)
+            return jsonify({"status": "sent", "n8n_response": response.json()})
+        except Exception as e:
+            print("⚠️ Error enviando a n8n:", str(e))
+            return jsonify({"status": "error", "message": str(e)}), 500
+    else:
+        print("⚠️ No se encontró N8N_WEBHOOK_URL en las variables de entorno")
+        return jsonify({"status": "error", "message": "N8N_WEBHOOK_URL not set"}), 500
+        
+# Endpoint para exponer el manifiesto MCP (para OpenAI Agent Builder)
+@flask_app.route('/manifest.json', methods=['GET'])
+def manifest():
     """Provee un manifiesto MCP compatible con OpenAI Agent Builder."""
     return jsonify({
         "schema_version": "v1",
@@ -81,23 +102,6 @@ def manifest():
             }
         ]
     })
-
-    """Envía los resultados del agente OWL hacia n8n"""
-    data = request.get_json()
-    print("📤 Enviando datos a n8n:", data)
-
-    n8n_url = os.getenv("N8N_WEBHOOK_URL")
-    if n8n_url:
-        try:
-            response = requests.post(n8n_url, json=data)
-            print(f"✅ OWL → n8n OK:", response.status_code)
-            return jsonify({"status": "sent", "n8n_response": response.json()})
-        except Exception as e:
-            print("⚠️ Error enviando a n8n:", str(e))
-            return jsonify({"status": "error", "message": str(e)}), 500
-    else:
-        print("⚠️ No se encontró N8N_WEBHOOK_URL en las variables de entorno")
-        return jsonify({"status": "error", "message": "N8N_WEBHOOK_URL not set"}), 500
 
 # Configure logging system
 def setup_logging():
