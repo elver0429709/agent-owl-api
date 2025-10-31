@@ -1482,6 +1482,26 @@ def relay_to_n8n():
         with open("owl_log.txt", "a", encoding="utf-8") as f:
             f.write(f"[{datetime.now()}] ERROR relay_to_n8n: {str(e)}\n")
         return jsonify({"error": str(e)}), 500
+from flask import jsonify
+
+@app.route("/.well-known/ai-plugin.json")
+def serve_manifest():
+    manifest = {
+        "schema_version": "v1",
+        "name_for_model": "Render_OWL_MCP",
+        "name_for_human": "Render OWL MCP",
+        "description_for_model": "Servidor OWL MCP desplegado en Render, integrado con OpenAI y n8n.",
+        "description_for_human": "Este servidor MCP permite conectar agentes de OpenAI con OWL y n8n.",
+        "auth": {"type": "none"},
+        "api": {
+            "type": "openapi",
+            "url": "https://agent-owl-api.onrender.com/openapi.json"
+        },
+        "logo_url": "https://agent-owl-api.onrender.com/static/logo.png",
+        "contact_email": "dev@owl.local",
+        "legal_info_url": "https://agent-owl-api.onrender.com/legal"
+    }
+    return jsonify(manifest)
 
 if __name__ == "__main__":
     import os
