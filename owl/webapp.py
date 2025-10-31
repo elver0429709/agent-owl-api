@@ -1504,7 +1504,7 @@ def serve_manifest():
     }
     return jsonify(manifest)
 
-@app.route("/openapi.json")
+@flask_app.route("/.well-known/ai-plugin.json")
 def serve_openapi():
     openapi_spec = {
         "openapi": "3.0.1",
