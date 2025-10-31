@@ -1467,6 +1467,33 @@ def serve_manifest():
     }
     return jsonify(manifest)
 
+@flask_app.route("/openapi.json", methods=["GET"])
+def serve_openapi():
+    openapi_spec = {
+        "openapi": "3.0.1",
+        "info": {
+            "title": "Render OWL MCP API",
+            "version": "1.0.0",
+            "description": "Endpoints públicos para comunicación entre OpenAI, OWL y n8n."
+        },
+        "paths": {
+            "/health": {
+                "get": {
+                    "summary": "Verifica el estado del servidor OWL MCP",
+                    "responses": {"200": {"description": "Servidor activo y funcional"}}
+                }
+            },
+            "/relay_to_n8n": {
+                "post": {
+                    "summary": "Envía datos desde OpenAI hacia n8n",
+                    "responses": {"200": {"description": "Datos reenviados exitosamente"}}
+                }
+            }
+        }
+    }
+    return jsonify(openapi_spec)
+
+
 if __name__ == "__main__":
     import os
     port = int(os.environ.get("PORT", 10000))
