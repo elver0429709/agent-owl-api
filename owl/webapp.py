@@ -1485,7 +1485,7 @@ def relay_to_n8n():
 
 from flask import jsonify
 
-@flask_app.route("/.well-known/ai-plugin.json")
+@app.route("/.well-known/ai-plugin.json")
 def serve_manifest():
     manifest = {
         "schema_version": "v1",
@@ -1503,6 +1503,36 @@ def serve_manifest():
         "legal_info_url": "https://agent-owl-api.onrender.com/legal"
     }
     return jsonify(manifest)
+
+@app.route("/openapi.json")
+def serve_openapi():
+    openapi_spec = {
+        "openapi": "3.0.1",
+        "info": {
+            "title": "Render OWL MCP API",
+            "version": "1.0.0",
+            "description": "Endpoints públicos para comunicación entre OpenAI, OWL y n8n."
+        },
+        "paths": {
+            "/health": {
+                "get": {
+                    "summary": "Verifica el estado del servidor OWL MCP",
+                    "responses": {
+                        "200": {"description": "Servidor activo y funcional"}
+                    }
+                }
+            },
+            "/prompt": {
+                "post": {
+                    "summary": "Envía prompts o comandos desde OpenAI hacia OWL",
+                    "responses": {
+                        "200": {"description": "Respuesta generada por OWL MCP"}
+                    }
+                }
+            }
+        }
+    }
+    return jsonify(openapi_spec)
 
 if __name__ == "__main__":
     import os
