@@ -1448,7 +1448,7 @@ def relay_to_n8n():
 
 from flask import jsonify
 
-@app.route("/.well-known/ai-plugin.json")
+@flask_app.route
 def serve_manifest():
     manifest = {
         "schema_version": "v1",
