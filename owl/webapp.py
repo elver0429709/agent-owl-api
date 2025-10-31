@@ -46,7 +46,6 @@ def health_manifest():
 
     return jsonify({"status": "ok", "service": "owl-api", "uptime": "active"}), 200
 
-
 import sys, os
 
 import sys, os
@@ -73,33 +72,6 @@ import datetime
 from dotenv import load_dotenv, set_key, find_dotenv, unset_key
 
 os.environ["PYTHONIOENCODING"] = "utf-8"
-
-@flask_app.route('/webhook', methods=['POST'])
-def zapier_entrypoint():
-    data = request.get_json()
-    task = data.get('task')
-    final_result = run_society(task)
-    return jsonify({"status": "completed", "result": final_result})
-    
-# Ruta adicional: OWL envía los resultados a n8n
-@flask_app.route('/send-to-n8n', methods=['POST'])
-def send_to_n8n():
-    """Envía los resultados del agente OWL hacia n8n"""
-    data = request.get_json()
-    print("📤 Enviando datos a n8n:", data)
-
-    n8n_url = os.getenv("N8N_WEBHOOK_URL")
-    if n8n_url:
-        try:
-            response = requests.post(n8n_url, json=data)
-            print(f"✅ OWL → n8n OK:", response.status_code)
-            return jsonify({"status": "sent", "n8n_response": response.json()})
-        except Exception as e:
-            print("⚠️ Error enviando a n8n:", str(e))
-            return jsonify({"status": "error", "message": str(e)}), 500
-    else:
-        print("⚠️ No se encontró N8N_WEBHOOK_URL en las variables de entorno")
-        return jsonify({"status": "error", "message": "N8N_WEBHOOK_URL not set"}), 500
 
 # ============================================================
 # ✅ NUEVO ENDPOINT PARA OPENAPI 3.0.0
