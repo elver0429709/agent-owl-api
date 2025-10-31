@@ -1482,9 +1482,10 @@ def relay_to_n8n():
         with open("owl_log.txt", "a", encoding="utf-8") as f:
             f.write(f"[{datetime.now()}] ERROR relay_to_n8n: {str(e)}\n")
         return jsonify({"error": str(e)}), 500
+
 from flask import jsonify
 
-@app.route("/.well-known/ai-plugin.json")
+@flask_app.route("/.well-known/ai-plugin.json")
 def serve_manifest():
     manifest = {
         "schema_version": "v1",
