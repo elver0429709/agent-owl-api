@@ -14,6 +14,41 @@ def webhook():
     data = request.get_json()
     return jsonify({'received': data}), 200
 
+# =========================================================
+# Endpoint /health con manifest MCP integrado
+# =========================================================
+@flask_app.route("/health", methods=["GET", "POST"])
+def health_check():
+    """
+    Endpoint de salud y manifest para integraciones MCP.
+    - GET: devuelve el manifest en formato JSON.
+    - POST: devuelve estado básico del servicio (para n8n o monitoreo).
+    """
+    if request.method == "GET":
+        manifest_data = {
+            "name": "owl-mcp",
+            "version": "1.0.0",
+            "description": "Servidor OWL MCP desplegado en Render, integrado con OpenAI y n8n.",
+            "protocol_version": "1.0",
+            "capabilities": {
+                "tools": True,
+                "resources": True,
+                "prompts": True
+            },
+            "endpoints": {
+                "tools": "/api/tools",
+                "resources": "/api/resources",
+                "prompts": "/api/prompts",
+                "health": "/health"
+            }
+        }
+        return jsonify(manifest_data), 200
+
+    return jsonify({"status": "ok", "service": "owl-api", "uptime": "active"}), 200
+
+
+import sys, os
+
 import sys, os
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 # Unless required by applicable law or agreed to in writing, software
