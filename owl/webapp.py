@@ -18,7 +18,7 @@ def webhook():
 # Endpoint /health con manifest MCP integrado
 # =========================================================
 @flask_app.route("/health", methods=["GET", "POST"])
-def health_check():
+def health_manifest():
     """
     Endpoint de salud y manifest para integraciones MCP.
     - GET: devuelve el manifest en formato JSON.
