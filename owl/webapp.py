@@ -37,6 +37,64 @@ def health_manifest():
         return jsonify(manifest_data), 200
     return jsonify({"status": "ok", "service": "owl-api", "uptime": "active"}), 200
 
+# =========================================================
+# 🤝 ENDPOINTS OBLIGATORIOS PARA MCP (JSON-RPC)
+# =========================================================
+
+@flask_app.route("/initialize", methods=["POST"])
+def initialize_mcp():
+    """ Endpoint 1/2 del Handshake MCP (Server Info) """
+    if request.json and request.json.get("method") == "initialize":
+        response_data = {
+            "jsonrpc": "2.0",
+            "method": "serverInfo",
+            "result": {
+                "server_id": "owl-render-server",
+                "version": "1.0.0",
+                "categories": ["Tools", "AI-Agents"]
+            },
+            "id": request.json.get("id", "1")
+        }
+        return jsonify(response_data), 200
+    return jsonify({"error": "Método JSON-RPC 'initialize' no recibido"}), 400
+
+
+@flask_app.route("/list_actions", methods=["POST"])
+def list_actions_mcp():
+    """ Endpoint 2/2 del Handshake MCP (List Capabilities) """
+    relay_tool = {
+        "name": "enviar_tarea_a_n8n",
+        "category": "Tool",
+        "schema": {
+            "jsonSchemaDraft": "2020-12",
+            "type": "object",
+            "description": "Envía una tarea de automatización a los flujos n8n.",
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "description": "Descripción de la tarea para n8n."
+                },
+                "recipient": {
+                    "type": "string",
+                    "description": "Plataforma destino (ej: HubSpot, Brevo, Meta)."
+                }
+            },
+            "required": ["message"]
+        }
+    }
+
+    response_data = {
+        "jsonrpc": "2.0",
+        "method": "listCapabilities",
+        "result": [relay_tool],
+        "id": request.json.get("id", "2")
+    }
+
+    return jsonify(response_data), 200
+# =========================================================
+# 🧩 Fin del bloque JSON-RPC MCP
+# =========================================================
+
 import sys, os
 
 import sys, os
