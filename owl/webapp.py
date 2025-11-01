@@ -92,8 +92,16 @@ def list_actions_mcp():
 
     return jsonify(response_data), 200
 # =========================================================
+# 🛠️ Alias para compatibilidad con Agent Builder (OpenAI)
+# =========================================================
+@flask_app.route("/api/tools", methods=["POST"])
+def api_tools_mcp():
+    """Alias de /list_actions para que OpenAI pueda descubrir las Tools"""
+    return list_actions_mcp()
+# =========================================================
 # 🧩 Fin del bloque JSON-RPC MCP
 # =========================================================
+
 
 import sys, os
 
