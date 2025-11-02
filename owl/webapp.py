@@ -1470,28 +1470,24 @@ def main():
 def health_check():
     return "OK", 200
     
-# ============================================================
-# 🧩 Bloque agregado por Elver — Conexión OWL → n8n
-# ============================================================
-
-import requests
-import json
+# =============================================================
+# 🔁 Bloque OWL → n8n actualizado (seguro y visible en logs)
+# =============================================================
+import os, requests, json
 from datetime import datetime
-
-import os
+from flask import request
 
 N8N_WEBHOOK_URL = os.getenv("N8N_WEBHOOK_URL")
 
 @flask_app.route("/relay_to_n8n", methods=["POST"])
 def relay_to_n8n():
-    """
-    Endpoint auxiliar para reenviar datos a n8n.
-    """
     try:
         data = request.get_json(force=True)
+        if not data:
+            print(f"[{datetime.now()}] ⚠️ No data received from Chatbase.")
+            return {"status": "no_data"}, 200
 
-        with open("owl_log.txt", "a", encoding="utf-8") as f:
-            f.write(f"\n[{datetime.now()}] Relay to n8n: {json.dumps(data, ensure_ascii=False)}\n")
+        print(f"[{datetime.now()}] 🔁 Relaying to n8n: {json.dumps(data, ensure_ascii=False)}")
 
         response = requests.post(
             N8N_WEBHOOK_URL,
@@ -1499,20 +1495,12 @@ def relay_to_n8n():
             headers={"Content-Type": "application/json"}
         )
 
-        if response.status_code == 200:
-            result = response.json()
-        else:
-            result = {"error": f"n8n devolvió {response.status_code}"}
-
-        with open("owl_log.txt", "a", encoding="utf-8") as f:
-            f.write(f"[{datetime.now()}] n8n response: {json.dumps(result, ensure_ascii=False)}\n")
-
-        return jsonify(result), 200
+        print(f"[{datetime.now()}] ✅ Sent to n8n: {response.status_code}")
+        return {"status": "ok", "n8n_response": response.status_code}, 200
 
     except Exception as e:
-        with open("owl_log.txt", "a", encoding="utf-8") as f:
-            f.write(f"[{datetime.now()}] ERROR relay_to_n8n: {str(e)}\n")
-        return jsonify({"error": str(e)}), 500
+        print(f"[{datetime.now()}] ❌ Error sending to n8n: {str(e)}")
+        return {"status": "error", "message": str(e)}, 500
 
 from flask import jsonify
 
