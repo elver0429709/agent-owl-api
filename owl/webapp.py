@@ -1549,6 +1549,49 @@ def serve_openapi():
     }
     return jsonify(openapi_spec)
 
+import requests
+from flask import jsonify
+
+# URL del webhook de producción de n8n
+N8N_WEBHOOK_URL = "https://n8n-clean-evw0.onrender.com/webhook/61a904f2-c40b-47ec-b98b-3b74f7f4d82e"
+
+@app.route('/probar-n8n', methods=['GET'])
+def enviar_tarea_a_n8n():
+    """
+    Endpoint para probar la conexión de OWL → n8n en Render.
+    """
+    payload = {
+        "origen": "agent-owl-api",
+        "datos_del_agente": {
+            "usuario": "Elver",
+            "accion": "prueba de conexión OWL → n8n",
+            "mensaje": "Conexión establecida correctamente 🚀"
+        }
+    }
+
+    headers = {"Content-Type": "application/json"}
+
+    try:
+        response = requests.post(N8N_WEBHOOK_URL, json=payload, headers=headers, timeout=10)
+
+        if response.status_code == 200:
+            return jsonify({
+                "status": "ok",
+                "detalle": "✅ Conexión exitosa con n8n",
+                "respuesta": response.text
+            }), 200
+        else:
+            return jsonify({
+                "status": "error",
+                "codigo": response.status_code,
+                "respuesta": response.text
+            }), response.status_code
+
+    except Exception as e:
+        return jsonify({
+            "status": "error",
+            "mensaje": str(e)
+        }), 500
 
 if __name__ == "__main__":
     import os
