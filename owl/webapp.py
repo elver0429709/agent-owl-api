@@ -1555,7 +1555,7 @@ from flask import jsonify
 # URL del webhook de producción de n8n
 N8N_WEBHOOK_URL = "https://n8n-clean-evw0.onrender.com/webhook/61a904f2-c40b-47ec-b98b-3b74f7f4d82e"
 
-@app.route('/probar-n8n', methods=['GET'])
+@flask_app.route('/probar-n8n', methods=['GET'])
 def enviar_tarea_a_n8n():
     """
     Endpoint para probar la conexión de OWL → n8n en Render.
