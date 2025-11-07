@@ -15,16 +15,6 @@ def webhook():
     return jsonify({'received': data}), 200
 
 # =========================================================
-# NUEVA RUTA DE PRUEBA SIMPLE (para confirmar registro)
-# =========================================================
-@flask_app.route("/test-route-2", methods=["GET"])
-def test_route_simple():
-    return jsonify({
-        "status": "ok",
-        "message": "Ruta de prueba simple funcionando correctamente 🚀"
-    }), 200
-
-# =========================================================
 # Endpoint /health con manifest MCP integrado
 # =========================================================
 @flask_app.route("/health", methods=["GET", "POST"])
