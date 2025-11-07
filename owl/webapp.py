@@ -1559,48 +1559,45 @@ def serve_openapi():
     }
     return jsonify(openapi_spec)
 
+# =========================================================
+# RUTA DE PRUEBA + CONEXIÓN DIRECTA A N8N
+# =========================================================
 import requests
 from flask import jsonify
 
-# URL del webhook de producción de n8n
-N8N_WEBHOOK_URL = "https://n8n-clean-evw0.onrender.com/webhook/61a904f2-c40b-47ec-b98b-3b74f74d82e"
-
-@flask_app.route('/probar-n8n', methods=['GET'])
-def enviar_tarea_a_n8n():
-    """
-    Endpoint para probar la conexión de OWL → n8n en Render.
-    """
-    payload = {
-        "origen": "agent-owl-api",
-        "datos_del_agente": {
-            "usuario": "Elver",
-            "accion": "prueba de conexión OWL → n8n",
-            "mensaje": "Conexión establecida correctamente 🚀"
-        }
-    }
-
-    headers = {"Content-Type": "application/json"}
-
+@flask_app.route("/test-route-2", methods=["GET"])
+def test_route_simple():
     try:
-        response = requests.post(N8N_WEBHOOK_URL, json=payload, headers=headers, timeout=10)
+        # Datos que se enviarán a n8n
+        payload = {
+            "origen": "test-route-2",
+            "mensaje": "Conexión desde OWL funcionando correctamente 🚀",
+            "timestamp": datetime.now().isoformat()
+        }
 
-        if response.status_code == 200:
-            return jsonify({
-                "status": "ok",
-                "detalle": "✅ Conexión exitosa con n8n",
-                "respuesta": response.text
-            }), 200
-        else:
-            return jsonify({
-                "status": "error",
-                "codigo": response.status_code,
-                "respuesta": response.text
-            }), response.status_code
+        # URL del webhook de n8n
+        N8N_WEBHOOK_URL = "https://n8n-clean-evw0.onrender.com/webhook/61a904f2-c40b-47ec-b98b-3b74f7f4d82e"
+
+        # Enviar petición a n8n
+        response = requests.post(
+            N8N_WEBHOOK_URL,
+            json=payload,
+            headers={"Content-Type": "application/json"},
+            timeout=10
+        )
+
+        # Retornar respuesta visible desde el navegador
+        return jsonify({
+            "status": "ok",
+            "message": "Ruta de prueba funcionando y payload enviado a n8n ✅",
+            "n8n_status_code": response.status_code,
+            "n8n_response": response.text
+        }), 200
 
     except Exception as e:
         return jsonify({
             "status": "error",
-            "mensaje": str(e)
+            "message": f"Fallo al conectar con n8n: {str(e)}"
         }), 500
 
 
